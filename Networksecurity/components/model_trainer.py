@@ -1,6 +1,5 @@
 import os
 import sys
-from urllib.parse import urlparse
 
 from Networksecurity.exception.exception import NetworkSecurityException 
 from Networksecurity.logging.logger import logging
@@ -61,7 +60,7 @@ class ModelTrainer:
                 # There are other ways to use the Model Registry, which depends on the use case,
                 # please refer to the doc for more information:
                 # https://mlflow.org/docs/latest/model-registry.html#api-workflow
-                mlflow.sklearn.log_model(best_model, "model", registered_model_name=best_model.__class__.__name__)
+                mlflow.sklearn.log_model(best_model, "model", registered_model_name=best_model)
             else:
                 mlflow.sklearn.log_model(best_model, "model")
         
@@ -94,7 +93,7 @@ class ModelTrainer:
                 'learning_rate':[.1,.01,.05,.001],
                 'subsample':[0.6,0.7,0.75,0.85,0.9],
                 'criterion':['squared_error', 'friedman_mse'],
-                'max_features':['sqrt','log2'],
+                'max_features':['auto','sqrt','log2'],
                 'n_estimators': [8,16,32,64,128,256]
             },
             "Logistic Regression":{},
@@ -133,7 +132,7 @@ class ModelTrainer:
         os.makedirs(model_dir_path,exist_ok=True)
 
         Network_Model=NetworkModel(preprocessor=preprocessor,model=best_model)
-        save_object(self.model_trainer_config.trained_model_file_path,obj=Network_Model)
+        save_object(self.model_trainer_config.trained_model_file_path,obj=NetworkModel)
         #model pusher
        
 
