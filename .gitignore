@@ -1,2 +1,7 @@
 /.venv
 /.env
+final_model/
+artifact/
+logs/
+__pycache__/
+*.pyc
