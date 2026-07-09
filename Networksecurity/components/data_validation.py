@@ -2,7 +2,7 @@ from Networksecurity.entity.artifact_entity import DataIngestionArtifact,DataVal
 from Networksecurity.entity.config_entity import DataValidationConfig
 from Networksecurity.exception.exception import NetworkSecurityException
 from Networksecurity.logging.logger import logging
-from Networksecurity.constant.training import SCHEMA_FILE_PATH
+from Networksecurity.constant.training import SCHEMA_FILE_PATH, TARGET_COLUMN
 from scipy.stats import ks_2samp
 import pandas as pd
 import os,sys
@@ -86,6 +86,45 @@ class DataValidation:
         except Exception as e:
             raise NetworkSecurityException(e, sys) from e
     
+    def handle_imbalance_with_smote(self, dataframe: pd.DataFrame) -> pd.DataFrame:
+        try:
+            logging.info("Checking if imblearn library is available for SMOTE...")
+            try:
+                from imblearn.over_sampling import SMOTE
+                imblearn_available = True
+            except ImportError:
+                imblearn_available = False
+                logging.info("imblearn library is not installed. Skipping SMOTE oversampling.")
+                return dataframe
+
+            if imblearn_available:
+                if TARGET_COLUMN not in dataframe.columns:
+                    logging.warning(f"Target column '{TARGET_COLUMN}' not found in dataframe. Skipping SMOTE.")
+                    return dataframe
+
+                # Check if there is actual imbalance in target column
+                class_counts = dataframe[TARGET_COLUMN].value_counts()
+                logging.info(f"Class distribution before SMOTE: {dict(class_counts)}")
+
+                if len(class_counts) > 1 and class_counts.min() < class_counts.max():
+                    logging.info("Applying SMOTE to balance target class distribution...")
+                    X = dataframe.drop(columns=[TARGET_COLUMN])
+                    y = dataframe[TARGET_COLUMN]
+
+                    smote = SMOTE(random_state=42)
+                    X_resampled, y_resampled = smote.fit_resample(X, y)
+
+                    resampled_df = pd.DataFrame(X_resampled, columns=X.columns)
+                    resampled_df[TARGET_COLUMN] = y_resampled
+                    
+                    logging.info(f"Class distribution after SMOTE: {dict(resampled_df[TARGET_COLUMN].value_counts())}")
+                    return resampled_df
+                else:
+                    logging.info("Data is already balanced or has less than 2 classes. Skipping SMOTE.")
+                    return dataframe
+
+        except Exception as e:
+            raise NetworkSecurityException(e, sys) from e
 
     def initiate_data_validation(self) -> DataValidationArtifact:
         try:
@@ -117,6 +156,10 @@ class DataValidation:
             # Let's check data drift
 
             status = self.detect_dataset_drift(base_df = train_dataframe,current_df = test_dataframe)
+
+            # Apply SMOTE to handle imbalance on train data if imblearn exists
+            train_dataframe = self.handle_imbalance_with_smote(train_dataframe)
+
             dir_path = os.path.dirname(self.data_validation_config.valid_test_file_path)
             os.makedirs(dir_path,exist_ok=True)
 
