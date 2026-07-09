@@ -12,11 +12,13 @@ import numpy as np
 from typing import List
 from sklearn.model_selection import train_test_split
 from Networksecurity.entity.artifact_entity import DataIngestionArtifact
+import certifi
 
 from dotenv import load_dotenv
 load_dotenv()
 
 MONGO_DB_URL = os.getenv("MONGO_DB_URL")
+ca = certifi.where()
 
 class DataIngestion:
     def __init__(self,data_ingestion_config:DataIngestionConfig):
@@ -35,7 +37,7 @@ class DataIngestion:
             database_name = self.data_ingestion_config.database_name
             collection_name = self.data_ingestion_config.collection_name
             logging.info(f"Exporting collection: {collection_name} from database: {database_name}")
-            self.mongo_client = pymongo.MongoClient(MONGO_DB_URL)
+            self.mongo_client = pymongo.MongoClient(MONGO_DB_URL, tlsCAFile=ca)
             collection = self.mongo_client[database_name][collection_name]
 
             df = pd.DataFrame(list(collection.find()))

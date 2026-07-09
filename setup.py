@@ -8,7 +8,7 @@ def get_requirements() -> List[str]:
     try:
         with open("requirements.txt", "r") as file:
             requirements_lst = file.readlines()
-            requirements_lst = [req.strip() for req in requirements_lst]
+            requirements_lst = [req.strip() for req in requirements_lst if req.strip() and not req.strip().startswith("#")]
 
             if "-e ." in requirements_lst:
                 requirements_lst.remove("-e .")

@@ -8,4 +8,5 @@ scikit-learn
 dill
 pyaml
 imbalanced-learn
+mlflow
 ## -e .
