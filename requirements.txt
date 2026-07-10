@@ -9,4 +9,8 @@ dill
 pyaml
 imbalanced-learn
 mlflow
+dagshub
+fastapi
+uvicorn
+
 ## -e .
