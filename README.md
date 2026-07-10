@@ -26,7 +26,6 @@ These metrics indicate an exceptionally low false-negative rate, which is critic
 
 ### MLflow Experiment Dashboard:
 ![MLflow Evaluation Metrics](docs/mlflow_metrics.png)
-*(To show this screenshot in your GitHub repository, save your screenshot in the `docs/` directory as `mlflow_metrics.png`)*
 
 ---
 
