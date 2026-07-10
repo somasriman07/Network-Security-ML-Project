@@ -52,6 +52,12 @@ templates = Jinja2Templates(directory="./templates")
 async def index():
     return RedirectResponse(url="/docs")
 
+@app.get("/favicon.ico")
+@app.get("/apple-touch-icon.png")
+@app.get("/apple-touch-icon-precomposed.png")
+async def favicon_and_apple_touch_icon():
+    return Response(status_code=204)
+
 @app.get("/train")
 async def train_route():
     try:
