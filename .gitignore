@@ -28,7 +28,6 @@ logs/
 Network_Data/
 valid_data/
 prediction_output/
-final_model/
 final_models/
 
 # Python packaging
