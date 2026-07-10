@@ -36,6 +36,22 @@ if __name__=='__main__':
         model_trainer_artifact = model_trainer.initiate_model_trainer()
         logging.info("Model Training artifacr created")
 
+        # Syncing local artifacts and final model to S3
+        from Networksecurity.constant.training import TRAINING_BUCKET_NAME
+        from Networksecurity.cloud.s3_syncer import S3Sync
+        
+        logging.info("Syncing artifacts and models to S3 bucket...")
+        s3_sync = S3Sync()
+        
+        # Sync artifacts
+        aws_bucket_url_artifact = f"s3://{TRAINING_BUCKET_NAME}/artifact/{training_pipeline_config.timestamp}"
+        s3_sync.sync_folder_to_s3(folder=training_pipeline_config.artifact_dir, aws_bucket_url=aws_bucket_url_artifact)
+        
+        # Sync final model
+        aws_bucket_url_model = f"s3://{TRAINING_BUCKET_NAME}/final_model/{training_pipeline_config.timestamp}"
+        s3_sync.sync_folder_to_s3(folder=training_pipeline_config.model_dir, aws_bucket_url=aws_bucket_url_model)
+        logging.info("S3 sync completed successfully!")
+
 
      
 

@@ -1,8 +1,37 @@
-/.venv
-/.env
-final_model/
-artifact/
-logs/
+# Virtual Environment
+.venv/
+venv/
+
+# IDE & System Files
+.DS_Store
+.idea/
+.vscode/
+
+# Environment Secrets
+.env
+
+# Cache & Compiled Files
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.ipynb_checkpoints/
+
+# MLflow
+mlruns/
+mlflow.db
+
+# Project Artifacts, Logs, and Temp Data
+artifact/
+logs/
+Network_Data/
+valid_data/
+prediction_output/
+final_model/
+final_models/
+
+# Python packaging
 *.egg-info/
+dist/
+build/

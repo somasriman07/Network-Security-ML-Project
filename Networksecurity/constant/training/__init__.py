@@ -11,6 +11,7 @@ TARGET_COLUMN = "Result"
 PIPELINE_NAME:str = "Network_Security"
 ARTIFACT_DIR:str = "artifact"
 FILE_NAME:str = "phising Data.csv"
+TRAINING_BUCKET_NAME = "network-security-sriman-2026"
 
 TRAIN_FILE_NAME:str = "train.csv"
 TEST_FILE_NAME:str = "test.csv"

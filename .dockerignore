@@ -1,0 +1,14 @@
+.git
+.github
+.gitignore
+.venv
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.db
+.ipynb_checkpoints/
+artifact/
+logs/
+.env
+*.log
