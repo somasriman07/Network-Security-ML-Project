@@ -24,6 +24,9 @@ After running the training pipeline and evaluating multiple classification algor
 
 These metrics indicate an exceptionally low false-negative rate, which is critical for phishing detection (minimizing the risk of a user visiting a malicious site marked as safe).
 
+### MLflow Experiment Dashboard:
+![MLflow Evaluation Metrics](docs/mlflow.jpg)
+
 ---
 
 ## 🛠️ Project Architecture
